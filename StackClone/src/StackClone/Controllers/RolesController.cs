@@ -69,11 +69,13 @@ namespace StackClone.Controllers
         }
 
         // POST: /Roles/Edit
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(IdentityRole role)
-        {   
-            _db.Entry(role).State = EntityState.Modified;
+        public IActionResult EditRole(string roleName)
+        {
+            var currentRole = _db.Roles.FirstOrDefault(m => m.Name == roleName);
+            currentRole.Name = Request.Form["Name"];
+            _db.Roles.Update(currentRole);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
