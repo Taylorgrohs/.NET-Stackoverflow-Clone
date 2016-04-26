@@ -8,6 +8,8 @@ using Microsoft.AspNet.Mvc.Rendering;
 using StackClone.Models;
 using Microsoft.AspNet.Identity;
 using System.Security.Claims;
+using Microsoft.Data.Entity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -60,9 +62,20 @@ namespace StackClone.Controllers
         }
 
         // GET: /Roles/Edit
-        public IActionResult Edit(string RoleName)
+        public IActionResult Edit(string roleName)
         {
-            var thisRole = _db.Roles.Where(r = r.Name.Equals(RoleName, ))
+            var thisRole = _db.Roles.Where(r => r.Name.Equals(roleName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            return View(thisRole);
+        }
+
+        // POST: /Roles/Edit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(IdentityRole role)
+        {   
+            _db.Entry(role).State = EntityState.Modified;
+            _db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
