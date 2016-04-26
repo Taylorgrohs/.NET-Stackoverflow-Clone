@@ -8,7 +8,7 @@ using StackClone.Models;
 namespace StackClone.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160425175252_Initial")]
+    [Migration("20160426163142_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -147,6 +147,20 @@ namespace StackClone.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
+            modelBuilder.Entity("StackClone.Models.Question", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("userQuestion");
+
+                    b.HasKey("Id");
+
+                    b.HasAnnotation("Relational:TableName", "Questions");
+                });
+
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNet.Identity.EntityFramework.IdentityRole")
@@ -174,6 +188,13 @@ namespace StackClone.Migrations
                         .WithMany()
                         .HasForeignKey("RoleId");
 
+                    b.HasOne("StackClone.Models.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("StackClone.Models.Question", b =>
+                {
                     b.HasOne("StackClone.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
